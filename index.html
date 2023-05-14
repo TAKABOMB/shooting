@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <style>
+       @keyframes sparkling {
+           0% { opacity: 1; }
+           50% { opacity: 0.5; }
+           100% { opacity: 1; }
+       }
+
+       .sparkle {
+           animation: sparkling 1s infinite;
+       }
+   </style>
+   <script>
+       function playSoundAndChangeImage() {
+           var audio = new Audio('sound.mp3');
+           audio.play();
+
+           var image = document.getElementById('myImage');
+           var originalSrc = image.src;
+
+           image.src = 'newImage.png';
+           image.classList.add('sparkle'); // キラキラアニメーションのクラスを追加
+
+           setTimeout(function() {
+               image.src = originalSrc;
+               image.classList.remove('sparkle'); // キラキラアニメーションのクラスを削除
+           }, 1000);
+       }
+   </script>
+</head>
+<body>
+   <button onclick="playSoundAndChangeImage()">
+       <img id="myImage" src="oldImage.png" alt="ボタン画像">
+   </button>
+</body>
+</html>
