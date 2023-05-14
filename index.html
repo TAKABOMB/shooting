@@ -2,37 +2,63 @@
 <html>
 <head>
    <style>
-       @keyframes sparkling {
-           0% { opacity: 1; }
-           50% { opacity: 0.5; }
-           100% { opacity: 1; }
+       #game-container {
+           position: relative;
+           width: 100%;
+           height: 100vh;
+           border: 1px solid black;
        }
 
-       .sparkle {
-           animation: sparkling 1s infinite;
+       #player {
+           position: absolute;
+           width: 10vw;
+           height: 10vw;
+           background-color: blue;
+           border-radius: 50%;
+           transform: translate(-50%, -50%);
+           touch-action: none;
+       }
+
+       .enemy {
+           position: absolute;
+           width: 10vw;
+           height: 10vw;
+           background-image: url('teki.png');
+           background-size: cover;
+           touch-action: none;
        }
    </style>
    <script>
-       function playSoundAndChangeImage() {
-           var audio = new Audio('sound.mp3');
-           audio.play();
+       var player = document.getElementById('player');
+       var gameContainer = document.getElementById('game-container');
+       var score = 0;
 
-           var image = document.getElementById('myImage');
-           var originalSrc = image.src;
+       gameContainer.addEventListener('touchmove', function(e) {
+           var touch = e.touches[0];
+           var x = touch.clientX - gameContainer.offsetLeft;
+           var y = touch.clientY - gameContainer.offsetTop;
+           player.style.left = x + 'px';
+           player.style.top = y + 'px';
+       });
 
-           image.src = 'newImage.png';
-           image.classList.add('sparkle'); // キラキラアニメーションのクラスを追加
+       gameContainer.addEventListener('click', function() {
+           var enemy = document.createElement('div');
+           enemy.classList.add('enemy');
+           enemy.style.left = Math.random() * (gameContainer.offsetWidth - 100) + 'px';
+           enemy.style.top = Math.random() * (gameContainer.offsetHeight - 100) + 'px';
+           gameContainer.appendChild(enemy);
 
-           setTimeout(function() {
-               image.src = originalSrc;
-               image.classList.remove('sparkle'); // キラキラアニメーションのクラスを削除
-           }, 1000);
-       }
+           enemy.addEventListener('click', function() {
+               gameContainer.removeChild(enemy);
+               score++;
+               console.log('Score: ' + score);
+           });
+       });
    </script>
 </head>
 <body>
-   <button onclick="playSoundAndChangeImage()">
-       <img id="myImage" src="oldImage.png" alt="ボタン画像">
-   </button>
+   <div id="game-container">
+       <div id="player"></div>
+   </div>
 </body>
 </html>
